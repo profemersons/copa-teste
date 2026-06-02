@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operação Copa - Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- BOAS VINDAS -->
+        <section id="screen-welcome" class="screen active">
+
+            <h1>🏆 Operação Copa</h1>
+
+            <p>Bastidores do Mundo Real</p>
+
+            <input id="codeInput" maxlength="3" placeholder="Digite seu código">
+
+            <button onclick="verifyCode()">
+                Continuar
+            </button>
+
+            <p id="codeError" class="error"></p>
+
+        </section>
+
+        <!-- CADASTRO -->
+        <section id="screen-register" class="screen">
+
+            <h2>Cadastro Inicial</h2>
+
+            <input id="nameInput" placeholder="Nome">
+
+            <input id="emojiInput" maxlength="2" placeholder="😀">
+
+            <input id="turmaInput" placeholder="Turma / Área">
+
+            <input id="pinInput" type="password" placeholder="Crie um PIN">
+
+            <button onclick="register()">
+                Criar Conta
+            </button>
+
+        </section>
+
+        <!-- PIN -->
+        <section id="screen-pin" class="screen">
+
+            <div id="playerPreview"></div>
+
+            <input id="loginPin" type="password" placeholder="Digite seu PIN">
+
+            <button onclick="login()">
+                Entrar
+            </button>
+
+            <p id="loginError" class="error"></p>
+
+        </section>
+
+    </div>
+
+    <div id="loading" class="loading hidden">
+        Carregando...
+    </div>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+
+</body>
+
+</html>

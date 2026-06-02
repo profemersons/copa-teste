@@ -1,0 +1,108 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(
+        180deg,
+        #f8fbff,
+        #eaf6ff,
+        #eefcf4
+    );
+    padding-bottom: 90px;
+}
+
+#loading {
+    padding: 40px;
+    text-align: center;
+}
+
+.header {
+    padding: 20px;
+    background: rgba(255,255,255,.7);
+    backdrop-filter: blur(10px);
+}
+
+.player {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.avatar {
+    font-size: 42px;
+}
+
+.content {
+    padding: 15px;
+}
+
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.08);
+}
+
+.big-code {
+    font-size: 34px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
+#qrcode {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 15px;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat span {
+    display: block;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: #2f80ed;
+    color: white;
+    font-size: 15px;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    background: white;
+
+    display: flex;
+    justify-content: space-around;
+
+    padding: 12px;
+}
+
+.bottom-nav button {
+    width: auto;
+    background: transparent;
+    color: black;
+    font-size: 22px;
+}
+
+.bottom-nav .active {
+    transform: scale(1.15);
+}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+        Operação Copa - Pacotes
+    </title>
+
+    <link rel="stylesheet" href="pacotes.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+
+    <div id="loading">
+
+        Carregando...
+
+    </div>
+
+    <div id="app" style="display:none;">
+
+        <header class="header">
+
+            <h1>🎁 Pacotes</h1>
+
+            <p id="remainingText"></p>
+
+        </header>
+
+        <main>
+
+            <div class="packs">
+
+                <div class="pack" id="pack1">
+                    📦
+                </div>
+
+                <div class="pack" id="pack2">
+                    📦
+                </div>
+
+                <div class="pack" id="pack3">
+                    📦
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <div id="modal" class="modal hidden">
+
+        <div class="modal-content">
+
+            <h2>
+                🎉 Pacote Aberto
+            </h2>
+
+            <div id="resultContainer"></div>
+
+            <button id="closeResult">
+
+                Fechar
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <nav class="bottom-nav">
+
+        <button onclick="goAlbum()">
+            🖼
+        </button>
+
+        <button class="active">
+            🎁
+        </button>
+
+        <button>
+            🎯
+        </button>
+
+        <button>
+            🔄
+        </button>
+
+        <button>
+            🏆
+        </button>
+
+        <button onclick="goProfile()">
+            👤
+        </button>
+
+    </nav>
+
+    <script src="../config.js"></script>
+    <script src="pacotes.js"></script>
+
+</body>
+
+</html>

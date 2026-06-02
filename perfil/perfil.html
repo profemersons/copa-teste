@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Operação Copa - Perfil</title>
+
+    <link rel="stylesheet" href="perfil.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+
+    <div id="loading">
+        Carregando perfil...
+    </div>
+
+    <div id="app" style="display:none">
+
+        <header class="header">
+
+            <div class="player">
+
+                <div class="avatar" id="playerEmoji">
+                    😀
+                </div>
+
+                <div>
+
+                    <h2 id="playerName"></h2>
+
+                    <p id="playerCourse"></p>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <main class="content">
+
+            <div class="card">
+
+                <h3>🎟 Seu Código</h3>
+
+                <div class="big-code" id="playerCode"></div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>📱 Meu QR Code</h3>
+
+                <div id="qrcode"></div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>📊 Estatísticas</h3>
+
+                <div class="stats">
+
+                    <div class="stat">
+                        <span id="uniqueStickers">0</span>
+                        <small>Únicas</small>
+                    </div>
+
+                    <div class="stat">
+                        <span id="totalStickers">0</span>
+                        <small>Total</small>
+                    </div>
+
+                    <div class="stat">
+                        <span id="friendsCount">0</span>
+                        <small>Amigos</small>
+                    </div>
+
+                    <div class="stat">
+                        <span id="tradesCount">0</span>
+                        <small>Trocas</small>
+                    </div>
+
+                    <div class="stat">
+                        <span id="pointsCount">0</span>
+                        <small>Pontos</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>🤝 Amigos</h3>
+
+                <button id="addFriendBtn">
+                    ➕ Adicionar amigo
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h3>⚙️ Conta</h3>
+
+                <button id="logoutBtn">
+                    🚪 Sair da conta
+                </button>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <nav class="bottom-nav">
+
+        <button onclick="goAlbum()">🖼</button>
+        <button onclick="goPacks()">🎁</button>
+        <button>🎯</button>
+        <button>🔄</button>
+        <button>🏆</button>
+        <button class="active">👤</button>
+
+    </nav>
+
+    <script src="../config.js"></script>
+    <script src="perfil.js"></script>
+
+</body>
+
+</html>
