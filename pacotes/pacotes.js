@@ -285,3 +285,16 @@ function goProfile() {
     window.location.href =
         "../perfil/perfil.html";
 }
+
+//talvez apagar aqui embaixo
+
+function bindCloseButton() {
+    const btn = document.getElementById("closeResult");
+
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+        document.getElementById("modal").classList.add("hidden");
+    });
+}
+bindCloseButton();

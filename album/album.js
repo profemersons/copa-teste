@@ -278,3 +278,7 @@ function goPacks() {
     window.location.href =
         "../pacotes/pacotes.html";
 }
+function goTrades() {
+   window.location.href =
+        "../trocas/trades.html";
+}

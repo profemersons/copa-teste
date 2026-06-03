@@ -97,9 +97,22 @@
 
                 <h3>🤝 Amigos</h3>
 
-                <button id="addFriendBtn">
-                    ➕ Adicionar amigo
-                </button>
+                <p>
+                    <span id="friendsCountCard">0</span>
+                    amigos cadastrados
+                </p>
+
+                <div class="friend-actions">
+
+                    <button id="addFriendBtn">
+                        ➕ Adicionar amigo
+                    </button>
+
+                    <button id="viewFriendsBtn">
+                        📋 Ver lista
+                    </button>
+
+                </div>
 
             </div>
 
@@ -127,6 +140,49 @@
         <button class="active">👤</button>
 
     </nav>
+
+    <!-- MODAL LISTA -->
+
+    <div id="friendsListModal" class="modal hidden">
+
+        <div class="modal-content">
+
+            <h3>🤝 Seus Amigos</h3>
+
+            <div id="friendsList"></div>
+
+            <button onclick="closeFriendsList()">
+                Fechar
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- MODAL ADICIONAR AMIGO -->
+
+<div id="friendModal" class="modal hidden">
+
+    <div class="modal-content">
+
+        <h3>➕ Adicionar amigo</h3>
+
+        <input
+            id="friendCode"
+            type="text"
+            placeholder="Digite o código do amigo">
+
+        <button onclick="addFriend()">
+            Adicionar
+        </button>
+
+        <button onclick="closeFriendModal()">
+            Cancelar
+        </button>
+
+    </div>
+
+</div>
 
     <script src="../config.js"></script>
     <script src="perfil.js"></script>

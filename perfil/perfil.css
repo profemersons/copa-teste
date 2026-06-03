@@ -106,3 +106,106 @@ button {
 .bottom-nav .active {
     transform: scale(1.15);
 }
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.6);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    z-index:100;
+}
+
+.hidden{
+    display:none;
+}
+
+
+.friend-item{
+    padding:12px;
+    border-bottom:1px solid #eee;
+}
+
+.friend-item h4{
+    margin:0;
+}
+
+.friend-item p{
+    margin:5px 0;
+    opacity:.7;
+}
+
+.friend-item button{
+    margin-top:10px;
+}
+.friend-actions{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+.modal-content input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:12px;
+    box-sizing:border-box;
+    margin-top:10px;
+    
+}
+
+.modal-content button{
+    width:100%;
+    margin-top:10px;
+}
+
+.friend-actions{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+.modal-content{
+    background:#fff !important;
+
+    width:90%;
+    max-width:420px;
+
+    border-radius:20px;
+
+    padding:20px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.15);
+
+    animation:modalPop .2s ease;
+}
+@keyframes modalPop {
+
+    from{
+        transform:scale(.95);
+        opacity:0;
+    }
+
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+
+}
+.friend-item{
+    background:#f8fbff;
+
+    border:1px solid #e6eef8;
+
+    border-radius:12px;
+
+    padding:12px;
+
+    margin-bottom:10px;
+}
+.modal-content h3{
+    margin-top:0;
+    text-align:center;
+}
+

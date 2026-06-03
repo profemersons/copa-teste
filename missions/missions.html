@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Operação Copa - Missões</title>
+
+    <link rel="stylesheet" href="missions.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+    <!-- LOADING -->
+    <div id="loading">
+        Carregando missões...
+    </div>
+
+    <!-- APP -->
+    <div id="app" style="display:none">
+
+        <header class="header">
+            <h1>🎯 Missões</h1>
+            <p>Complete desafios e ganhe recompensas</p>
+        </header>
+
+        <main id="missionsContainer"></main>
+
+    </div>
+
+    <!-- NAV -->
+    <nav class="menu">
+
+        <button onclick="goAlbum()">🖼 Álbum</button>
+        <button onclick="goPacks()">🎁 Pacotes</button>
+        <button onclick="location.reload()">🎯 Missões</button>
+        <button onclick="goProfile()">👤 Perfil</button>
+
+    </nav>
+
+    <script src="../config.js"></script>
+    <script src="missions.js"></script>
+
+</body>
+
+</html>
