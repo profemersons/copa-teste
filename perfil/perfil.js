@@ -59,7 +59,9 @@ async function loadStats() {
             .eq("player_id", player.id);
 
     const unique =
-        inventory?.length || 0;
+        inventory?.filter(
+            item => item.quantity > 0
+        ).length || 0;
 
     const total =
         inventory?.reduce(
@@ -68,6 +70,11 @@ async function loadStats() {
             0
         ) || 0;
 
+    const shinyCount =
+        inventory?.filter(
+            item => item.is_shiny
+        ).length || 0;
+
     document.getElementById(
         "uniqueStickers"
     ).textContent = unique;
@@ -75,6 +82,7 @@ async function loadStats() {
     document.getElementById(
         "totalStickers"
     ).textContent = total;
+    player.shinyCount = shinyCount;
 
     const { data: friends } =
         await client
@@ -302,7 +310,14 @@ async function loadFriendsList() {
                 .eq("player_id", friendId);
 
         const unique =
-            inventory?.length || 0;
+            inventory?.filter(
+                item => item.quantity > 0
+            ).length || 0;
+
+        const shiny =
+            inventory?.filter(
+                item => item.is_shiny
+            ).length || 0;
 
         const div =
             document.createElement("div");
@@ -315,6 +330,8 @@ async function loadFriendsList() {
     <p>${friend.turma_area}</p>
 
     <p>📖 ${unique} figurinhas únicas</p>
+
+    <p>⭐ ${shiny} brilhantes</p>
 
     <p>🏆 ${friend.points || 0} pontos</p>
 

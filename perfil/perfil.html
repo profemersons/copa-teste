@@ -8,6 +8,12 @@
 
     <link rel="stylesheet" href="perfil.css">
 
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
@@ -132,7 +138,7 @@
 
     <nav class="bottom-nav">
 
-        <button onclick="goAlbum()">🖼</button>
+        <button onclick="goAlbum()">🎴</button>
         <button onclick="goPacks()">🎁</button>
         <button>🎯</button>
         <button>🔄</button>
@@ -161,28 +167,25 @@
 
     <!-- MODAL ADICIONAR AMIGO -->
 
-<div id="friendModal" class="modal hidden">
+    <div id="friendModal" class="modal hidden">
 
-    <div class="modal-content">
+        <div class="modal-content">
 
-        <h3>➕ Adicionar amigo</h3>
+            <h3>➕ Adicionar amigo</h3>
 
-        <input
-            id="friendCode"
-            type="text"
-            placeholder="Digite o código do amigo">
+            <input id="friendCode" type="text" placeholder="Digite o código do amigo">
 
-        <button onclick="addFriend()">
-            Adicionar
-        </button>
+            <button onclick="addFriend()">
+                Adicionar
+            </button>
 
-        <button onclick="closeFriendModal()">
-            Cancelar
-        </button>
+            <button onclick="closeFriendModal()">
+                Cancelar
+            </button>
+
+        </div>
 
     </div>
-
-</div>
 
     <script src="../config.js"></script>
     <script src="perfil.js"></script>

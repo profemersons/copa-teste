@@ -1,11 +1,30 @@
 let currentCode = null;
 let currentPlayer = null;
 
-function showScreen(id){
+/* =========================
+EMOJIS BLOQUEADOS
+========================= */
+
+const blockedEmojis = [
+  "💩",
+  "🖕",
+  "🍆",
+  "🍑",
+  "🔞",
+  "🍺",
+  "🔫",
+  "🚬"
+];
+
+/* =========================
+TELAS
+========================= */
+
+function showScreen(id) {
 
   document
     .querySelectorAll(".screen")
-    .forEach(screen=>{
+    .forEach(screen => {
       screen.classList.remove("active");
     });
 
@@ -14,40 +33,45 @@ function showScreen(id){
     .classList.add("active");
 }
 
-function showLoading(){
+function showLoading() {
 
   document
     .getElementById("loading")
     .classList.remove("hidden");
 }
 
-function hideLoading(){
+function hideLoading() {
 
   document
     .getElementById("loading")
     .classList.add("hidden");
 }
 
-/* -------------------
+/* =========================
 VERIFICAR CÓDIGO
-------------------- */
+========================= */
 
-async function verifyCode(){
+async function verifyCode() {
 
-  const code = document
-    .getElementById("codeInput")
-    .value
-    .trim()
-    .toUpperCase();
+  const code =
+    document
+      .getElementById("codeInput")
+      .value
+      .trim()
+      .toUpperCase();
 
   const errorBox =
-    document.getElementById("codeError");
+    document.getElementById(
+      "codeError"
+    );
 
   errorBox.textContent = "";
 
-  if(!code){
+  if (!code) {
+
     errorBox.textContent =
       "Digite um código.";
+
     return;
   }
 
@@ -57,12 +81,12 @@ async function verifyCode(){
     await client
       .from("player_codes")
       .select("*")
-      .eq("code",code)
+      .eq("code", code)
       .single();
 
   hideLoading();
 
-  if(error || !data){
+  if (error || !data) {
 
     errorBox.textContent =
       "Código inválido.";
@@ -72,28 +96,28 @@ async function verifyCode(){
 
   currentCode = code;
 
-  /* PRIMEIRO ACESSO */
+  if (data.used === false) {
 
-  if(data.used === false){
-
-    showScreen("screen-register");
+    showScreen(
+      "screen-register"
+    );
 
     return;
   }
-
-  /* JÁ POSSUI CONTA */
 
   const { data: player } =
     await client
       .from("players")
       .select("*")
-      .eq("code",code)
+      .eq("code", code)
       .single();
 
   currentPlayer = player;
 
   document
-    .getElementById("playerPreview")
+    .getElementById(
+      "playerPreview"
+    )
     .innerHTML = `
       <h2>
         ${player.emoji}
@@ -108,23 +132,74 @@ async function verifyCode(){
   showScreen("screen-pin");
 }
 
-/* -------------------
+/* =========================
 CADASTRO
-------------------- */
+========================= */
 
-async function register(){
+async function register() {
 
   const name =
-    document.getElementById("nameInput").value;
+    document
+      .getElementById("nameInput")
+      .value
+      .trim();
 
   const emoji =
-    document.getElementById("emojiInput").value;
+    document
+      .getElementById("emojiInput")
+      .value
+      .trim();
 
-  const turma =
-    document.getElementById("turmaInput").value;
+  const type =
+    document
+      .getElementById("typeInput")
+      .value;
+
+  let turma =
+    document
+      .getElementById("turmaSelect")
+      .value;
+
+  if (turma === "OUTRO") {
+
+    turma =
+      document
+        .getElementById(
+          "otherAreaInput"
+        )
+        .value
+        .trim();
+  }
 
   const pin =
-    document.getElementById("pinInput").value;
+    document
+      .getElementById("pinInput")
+      .value
+      .trim();
+
+  if (
+    !name ||
+    !emoji ||
+    !type ||
+    !turma ||
+    !pin
+  ) {
+
+    alert(
+      "Preencha todos os campos."
+    );
+
+    return;
+  }
+
+  if (pin.length !== 4) {
+
+    alert(
+      "O PIN deve ter 4 números."
+    );
+
+    return;
+  }
 
   showLoading();
 
@@ -137,22 +212,22 @@ async function register(){
           name,
           emoji,
           turma_area: turma,
-          type:"student",
+          type,
           pin
         }
       ])
       .select()
       .single();
 
-  if(error){
+  if (error) {
 
     hideLoading();
 
-    alert(
-      "Erro ao criar conta"
-    );
-
     console.log(error);
+
+    alert(
+      "Erro ao criar conta."
+    );
 
     return;
   }
@@ -160,7 +235,7 @@ async function register(){
   await client
     .from("player_codes")
     .update({
-      used:true
+      used: true
     })
     .eq(
       "code",
@@ -172,7 +247,9 @@ async function register(){
   hideLoading();
 
   document
-    .getElementById("playerPreview")
+    .getElementById(
+      "playerPreview"
+    )
     .innerHTML = `
       <h2>
         ${data.emoji}
@@ -187,21 +264,28 @@ async function register(){
   showScreen("screen-pin");
 }
 
-/* -------------------
+/* =========================
 LOGIN
-------------------- */
+========================= */
 
-async function login(){
+async function login() {
 
   const pin =
-    document.getElementById("loginPin").value;
+    document
+      .getElementById("loginPin")
+      .value;
 
   const errorBox =
-    document.getElementById("loginError");
+    document
+      .getElementById(
+        "loginError"
+      );
 
   errorBox.textContent = "";
 
-  if(pin !== currentPlayer.pin){
+  if (
+    pin !== currentPlayer.pin
+  ) {
 
     errorBox.textContent =
       "PIN inválido.";
@@ -211,13 +295,175 @@ async function login(){
 
   localStorage.setItem(
     "player",
-    JSON.stringify(currentPlayer)
+    JSON.stringify(
+      currentPlayer
+    )
   );
- //talvez precise arrumar aqui
+
   window.location.href =
     "album/album.html";
 }
 
-window.verifyCode = verifyCode;
-window.register = register;
-window.login = login;
+/* =========================
+CARREGAR TURMAS
+========================= */
+
+async function loadAreas() {
+
+  const type =
+    document
+      .getElementById(
+        "typeInput"
+      )
+      .value;
+
+  const select =
+    document
+      .getElementById(
+        "turmaSelect"
+      );
+
+  select.innerHTML =
+    "<option>Carregando...</option>";
+
+  const { data } =
+    await client
+      .from("groups")
+      .select("*")
+      .eq("type", type)
+      .eq("active", true)
+      .order("name");
+
+  select.innerHTML =
+    "<option value=''>Selecione</option>";
+
+  data.forEach(item => {
+
+    select.innerHTML += `
+      <option value="${item.name}">
+        ${item.name}
+      </option>
+    `;
+  });
+
+  select.innerHTML += `
+    <option value="OUTRO">
+      ✏️ Minha turma/setor não está na lista
+    </option>
+  `;
+}
+
+/* =========================
+OUTRO
+========================= */
+
+document
+  .getElementById(
+    "turmaSelect"
+  )
+  .addEventListener(
+    "change",
+    () => {
+
+      const value =
+        document
+          .getElementById(
+            "turmaSelect"
+          )
+          .value;
+
+      document
+        .getElementById(
+          "otherAreaInput"
+        )
+        .style.display =
+        value === "OUTRO"
+          ? "block"
+          : "none";
+    }
+  );
+
+/* =========================
+EMOJI
+========================= */
+
+const emojiInput =
+  document.getElementById(
+    "emojiInput"
+  );
+
+emojiInput.addEventListener(
+  "input",
+  () => {
+
+    const value =
+      emojiInput.value;
+
+    const emojiRegex =
+      /\p{Extended_Pictographic}/gu;
+
+    const emojis =
+      value.match(
+        emojiRegex
+      );
+
+    const emoji =
+      emojis
+        ? emojis[0]
+        : "";
+
+    if (
+      blockedEmojis.includes(
+        emoji
+      )
+    ) {
+
+      alert(
+        "Escolha outro avatar."
+      );
+
+      emojiInput.value = "";
+
+      return;
+    }
+
+    emojiInput.value =
+      emoji;
+  }
+);
+
+/* =========================
+PIN NUMÉRICO
+========================= */
+
+const pinInput =
+  document.getElementById(
+    "pinInput"
+  );
+
+pinInput.addEventListener(
+  "input",
+  () => {
+
+    pinInput.value =
+      pinInput.value
+        .replace(/\D/g, "")
+        .slice(0, 4);
+  }
+);
+
+/* =========================
+EXPORTS
+========================= */
+
+window.verifyCode =
+  verifyCode;
+
+window.register =
+  register;
+
+window.login =
+  login;
+
+window.loadAreas =
+  loadAreas;

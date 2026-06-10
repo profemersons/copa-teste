@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Operação Copa - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -17,7 +23,13 @@
 
             <h1>🏆 Operação Copa</h1>
 
-            <p>Bastidores do Mundo Real</p>
+            <p>
+                Bastidores do Mundo Real
+            </p>
+
+            <p style="font-size:14px;">
+                Colecione profissões • Faça trocas • Complete o álbum
+            </p>
 
             <input id="codeInput" maxlength="3" placeholder="Digite seu código">
 
@@ -32,13 +44,45 @@
         <!-- CADASTRO -->
         <section id="screen-register" class="screen">
 
-            <h2>Cadastro Inicial</h2>
+            <h2>Monte seu Perfil</h2>
+
+            <div class="avatar-picker">
+
+                <input id="emojiInput" maxlength="2" placeholder="😀" autocomplete="off">
+
+                <span>
+                    Toque para escolher um emoji como seu avatar
+                </span>
+
+            </div>
 
             <input id="nameInput" placeholder="Nome">
 
-            <input id="emojiInput" maxlength="2" placeholder="😀">
+            <select id="typeInput" onchange="loadAreas()">
 
-            <input id="turmaInput" placeholder="Turma / Área">
+                <option value="">
+                    Você é...
+                </option>
+
+                <option value="student">
+                    🎓 Aluno
+                </option>
+
+                <option value="employee">
+                    🏢 Funcionário
+                </option>
+
+            </select>
+
+            <select id="turmaSelect">
+
+                <option value="">
+                    Selecione primeiro
+                </option>
+
+            </select>
+
+            <input id="otherAreaInput" placeholder="Digite sua turma ou setor" style="display:none;">
 
             <input id="pinInput" type="password" placeholder="Crie um PIN">
 
@@ -69,7 +113,7 @@
         Carregando...
     </div>
 
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     <script src="app.js"></script>

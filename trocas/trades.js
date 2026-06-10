@@ -1,10 +1,14 @@
-const player = JSON.parse(localStorage.getItem("player"));
+const player = JSON.parse(
+    localStorage.getItem("player")
+);
 
 if (!player) {
-    window.location.href = "../index.html";
+    window.location.href =
+        "../index.html";
 }
 
 let selectedSticker = null;
+let selectedInventory = null;
 let friend = null;
 
 const areasOrder = [
@@ -28,36 +32,46 @@ const areasOrder = [
 init();
 
 async function init() {
+
     await loadStickers();
 
-    document.getElementById("loading").style.display = "none";
-    document.getElementById("app").style.display = "block";
+    document.getElementById(
+        "loading"
+    ).style.display = "none";
+
+    document.getElementById(
+        "app"
+    ).style.display = "block";
 }
 
 /* =========================
-PASSO 1 - ÁLBUM
+PASSO 1
+FIGURINHAS
 ========================= */
 
 async function loadStickers() {
 
-    const { data: inventory } = await client
-        .from("inventory")
-        .select("*")
-        .eq("player_id", player.id);
+    const { data: inventory } =
+        await client
+            .from("inventory")
+            .select("*")
+            .eq(
+                "player_id",
+                player.id
+            );
 
-    const { data: stickers } = await client
-        .from("stickers")
-        .select("*")
-        .order("global_number");
-
-    const ownedMap = {};
-
-    inventory.forEach(item => {
-        ownedMap[item.sticker_id] = item.quantity;
-    });
+    const { data: stickers } =
+        await client
+            .from("stickers")
+            .select("*")
+            .order(
+                "global_number"
+            );
 
     const container =
-        document.getElementById("albumContainer");
+        document.getElementById(
+            "albumContainer"
+        );
 
     container.innerHTML = "";
 
@@ -65,15 +79,24 @@ async function loadStickers() {
 
         const areaStickers =
             stickers.filter(
-                s => s.area === area
+                sticker =>
+                    sticker.area === area &&
+                    sticker.type !== "legendary"
             );
 
-        if (!areaStickers.length) return;
+        if (
+            !areaStickers.length
+        ) {
+            return;
+        }
 
         const section =
-            document.createElement("section");
+            document.createElement(
+                "section"
+            );
 
-        section.className = "area";
+        section.className =
+            "area";
 
         section.innerHTML = `
             <div class="area-title">
@@ -84,114 +107,317 @@ async function loadStickers() {
         `;
 
         const grid =
-            section.querySelector(".grid");
+            section.querySelector(
+                ".grid"
+            );
 
-        areaStickers.forEach(sticker => {
+        areaStickers.forEach(
+            sticker => {
 
-            const qty =
-                ownedMap[sticker.id];
+                const normal =
+                    inventory.find(
+                        item =>
+                            item.sticker_id === sticker.id &&
+                            !item.is_shiny
+                    );
 
-            if (!qty) return;
+                const shiny =
+                    inventory.find(
+                        item =>
+                            item.sticker_id === sticker.id &&
+                            item.is_shiny
+                    );
 
-            const card =
-                document.createElement("div");
+                if (normal) {
 
-            card.className = "card";
-
-            card.innerHTML = `
-                <div class="emoji">
-                    ${sticker.emoji}
-                </div>
-
-                <div class="number">
-                    #${String(
-                sticker.global_number
-            ).padStart(3, "0")}
-                </div>
-
-                ${qty > 1
-                    ? `<div class="quantity">x${qty}</div>`
-                    : ""
+                    createStickerCard(
+                        grid,
+                        sticker,
+                        normal,
+                        false
+                    );
                 }
-            `;
 
-            card.onclick = () => {
-                selectedSticker = sticker;
-                goStep2();
-            };
+                if (shiny) {
 
-            grid.appendChild(card);
+                    createStickerCard(
+                        grid,
+                        sticker,
+                        shiny,
+                        true
+                    );
+                }
 
-        });
+            }
+        );
 
-        if (grid.children.length > 0) {
-            container.appendChild(section);
+        if (
+            grid.children.length > 0
+        ) {
+
+            container.appendChild(
+                section
+            );
         }
 
     });
 
 }
 
-/* =========================
-PASSO 2
-========================= */
+function createStickerCard(
+    grid,
+    sticker,
+    inventoryItem,
+    isShiny
+) {
 
-function goStep2() {
-    document.getElementById("step1").style.display = "none";
-    document.getElementById("step2").style.display = "block";
+    const card =
+        document.createElement(
+            "div"
+        );
 
-    document.getElementById("stepText").innerText = "2. Escolha o amigo";
+    card.className =
+        "card";
+
+    if (isShiny) {
+        card.classList.add(
+            "shiny"
+        );
+    }
+
+    card.innerHTML = `
+        ${
+            isShiny
+                ? `
+                    <div class="shiny-badge">
+                        ⭐
+                    </div>
+                `
+                : ""
+        }
+
+        <div class="emoji">
+            ${sticker.emoji}
+        </div>
+
+        <div class="number">
+            #${String(
+                sticker.global_number
+            ).padStart(3, "0")}
+        </div>
+
+        ${
+            inventoryItem.quantity > 1
+                ? `
+                    <div class="quantity">
+                        x${inventoryItem.quantity}
+                    </div>
+                `
+                : ""
+        }
+    `;
+
+    card.onclick = () => {
+
+        selectedSticker = {
+            ...sticker,
+            is_shiny: isShiny
+        };
+
+        selectedInventory =
+            inventoryItem;
+
+        goStep2();
+    };
+
+    grid.appendChild(card);
 }
 
 /* =========================
-BUSCAR AMIGO
+PASSO 2
+BUSCAR DESTINATÁRIO
 ========================= */
+
+function goStep2() {
+
+    document.getElementById(
+        "step1"
+    ).style.display = "none";
+
+    document.getElementById(
+        "step2"
+    ).style.display = "block";
+
+    document.getElementById(
+        "stepText"
+    ).innerText =
+        "2. Digite o código do jogador que receberá a figurinha";
+}
 
 async function searchFriend() {
 
-    const code = document.getElementById("friendCode").value.trim();
+    const code =
+        document
+            .getElementById(
+                "friendCode"
+            )
+            .value
+            .trim()
+            .toUpperCase();
 
-    if (!code) return;
+    if (!code) {
 
-    if (code === player.code) {
-        alert("Você não pode trocar consigo mesmo.");
+        alert(
+            "Digite um código."
+        );
+
         return;
     }
 
-    const { data } = await client
-        .from("players")
-        .select("*")
-        .eq("code", code)
-        .single();
+    if (
+        code === player.code
+    ) {
+
+        alert(
+            "Você não pode enviar para si mesmo."
+        );
+
+        return;
+    }
+
+    const { data } =
+        await client
+            .from("players")
+            .select("*")
+            .eq(
+                "code",
+                code
+            )
+            .single();
 
     if (!data) {
-        alert("Amigo não encontrado");
+
+        alert(
+            "Jogador não encontrado."
+        );
+
         return;
     }
 
     friend = data;
 
-    document.getElementById("friendResult").style.display = "block";
-    document.getElementById("friendResult").innerHTML = `
-        <h3>${data.emoji} ${data.name}</h3>
-        <p>${data.turma_area}</p>
-    `;
+    const result =
+        document.getElementById(
+            "friendResult"
+        );
 
-    document.getElementById("pinArea").style.display = "block";
+    result.style.display =
+        "block";
+
+    result.innerHTML = `
+        <h3>
+            ${data.emoji}
+            ${data.name}
+        </h3>
+
+        <p>
+            ${data.turma_area}
+        </p>
+
+        <button onclick="goStep3()">
+            Continuar →
+        </button>
+    `;
 }
 
 /* =========================
-CONFIRMAR TROCA
+PASSO 3
+CONFIRMAÇÃO
+========================= */
+
+function goStep3() {
+
+    document.getElementById(
+        "step2"
+    ).style.display = "none";
+
+    document.getElementById(
+        "step3"
+    ).style.display = "block";
+
+    document.getElementById(
+        "stepText"
+    ).innerText =
+        "3. Confirme o envio";
+
+    document.getElementById(
+        "tradeSummary"
+    ).innerHTML = `
+        <p>
+            Você está enviando:
+        </p>
+
+        <h3>
+            ${
+                selectedSticker.is_shiny
+                    ? "⭐ "
+                    : ""
+            }
+            ${selectedSticker.emoji}
+            ${selectedSticker.profession}
+        </h3>
+
+        <p>
+            #${String(
+                selectedSticker.global_number
+            ).padStart(3, "0")}
+        </p>
+
+        <hr>
+
+        <p>
+            Para:
+        </p>
+
+        <h3>
+            ${friend.emoji}
+            ${friend.name}
+        </h3>
+
+        <p>
+            ${friend.turma_area}
+        </p>
+    `;
+}
+/* =========================
+CONFIRMAR ENVIO
 ========================= */
 
 async function confirmTrade() {
 
-    if (!friend || !selectedSticker) {
+    if (!selectedSticker) {
+
+        alert(
+            "Selecione uma figurinha."
+        );
+
+        return;
+    }
+
+    if (!friend) {
+
+        alert(
+            "Selecione um destinatário."
+        );
+
         return;
     }
 
     const pin =
-        document.getElementById("pinInput")
+        document
+            .getElementById(
+                "pinInput"
+            )
             .value
             .trim();
 
@@ -208,13 +434,16 @@ async function confirmTrade() {
         await client
             .from("players")
             .select("*")
-            .eq("id", player.id)
+            .eq(
+                "id",
+                player.id
+            )
             .single();
 
     if (!me) {
 
         alert(
-            "Erro ao validar usuário."
+            "Erro ao validar jogador."
         );
 
         return;
@@ -229,47 +458,57 @@ async function confirmTrade() {
         return;
     }
 
-    if (friend.code === player.code) {
+    await removeStickerFromPlayer();
 
-        alert(
-            "Troca inválida."
-        );
+    await addStickerToFriend();
 
-        return;
-    }
+    await registerTrade();
 
-    // REMOVE DO PLAYER
+    showSuccessModal();
+}
 
-    const { data: inv } =
-        await client
-            .from("inventory")
-            .select("*")
-            .eq("player_id", player.id)
-            .eq("sticker_id", selectedSticker.id)
-            .single();
+/* =========================
+REMOVE DO INVENTÁRIO
+========================= */
 
-    if (inv.quantity > 1) {
+async function removeStickerFromPlayer() {
+
+    if (
+        selectedInventory.quantity > 1
+    ) {
 
         await client
             .from("inventory")
             .update({
                 quantity:
-                    inv.quantity - 1
+                    selectedInventory.quantity - 1
             })
-            .eq("id", inv.id);
+            .eq(
+                "id",
+                selectedInventory.id
+            );
 
     } else {
 
         await client
             .from("inventory")
             .delete()
-            .eq("id", inv.id);
+            .eq(
+                "id",
+                selectedInventory.id
+            );
     }
 
-    // ADICIONA NO AMIGO
+}
+
+/* =========================
+ADICIONA AO DESTINATÁRIO
+========================= */
+
+async function addStickerToFriend() {
 
     const {
-        data: friendInv
+        data: existing
     } =
         await client
             .from("inventory")
@@ -282,19 +521,23 @@ async function confirmTrade() {
                 "sticker_id",
                 selectedSticker.id
             )
+            .eq(
+                "is_shiny",
+                selectedSticker.is_shiny
+            )
             .maybeSingle();
 
-    if (friendInv) {
+    if (existing) {
 
         await client
             .from("inventory")
             .update({
                 quantity:
-                    friendInv.quantity + 1
+                    existing.quantity + 1
             })
             .eq(
                 "id",
-                friendInv.id
+                existing.id
             );
 
     } else {
@@ -309,38 +552,143 @@ async function confirmTrade() {
                     sticker_id:
                         selectedSticker.id,
 
+                    is_shiny:
+                        selectedSticker.is_shiny,
+
                     quantity: 1
                 }
             ]);
     }
 
-    alert(
-        "Troca realizada com sucesso! 🎉"
-    );
-
-    location.reload();
 }
 
 /* =========================
-NAV
+REGISTRA TROCA
+========================= */
+
+async function registerTrade() {
+
+    await client
+        .from("trades")
+        .insert([
+            {
+                from_player:
+                    player.id,
+
+                to_player:
+                    friend.id,
+
+                sticker_id:
+                    selectedSticker.id,
+
+                is_shiny:
+                    selectedSticker.is_shiny,
+
+                quantity: 1,
+
+                status:
+                    "completed"
+            }
+        ]);
+
+}
+
+/* =========================
+SUCESSO
+========================= */
+
+function showSuccessModal() {
+
+    document
+        .getElementById(
+            "successContent"
+        )
+        .innerHTML = `
+            <p>
+                Sua figurinha foi enviada com sucesso.
+            </p>
+
+            <br>
+
+            <h3>
+                ${
+                    selectedSticker.is_shiny
+                        ? "⭐ "
+                        : ""
+                }
+
+                ${selectedSticker.emoji}
+
+                ${selectedSticker.profession}
+            </h3>
+
+            <p>
+                ➜
+            </p>
+
+            <h3>
+                ${friend.emoji}
+
+                ${friend.name}
+            </h3>
+
+            <br>
+
+            <p>
+                Agora combina a próxima troca no presencial 😎
+            </p>
+        `;
+
+    document
+        .getElementById(
+            "successModal"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+}
+
+function closeSuccess() {
+
+    location.reload();
+
+}
+
+/* =========================
+NAVEGAÇÃO
 ========================= */
 
 function goAlbum() {
-    window.location.href = "../album/album.html";
+
+    window.location.href =
+        "../album/album.html";
+
 }
 
 function goPacks() {
-    window.location.href = "../packs/pacotes.html";
+
+    window.location.href =
+        "../pacotes/pacotes.html";
+
 }
 
 function goMissions() {
-    window.location.href = "../missions/missions.html";
+
+    window.location.href =
+        "../missions/missions.html";
+
 }
 
 function goTrades() {
+
     window.location.reload();
+
 }
 
 function goProfile() {
-    window.location.href = "../perfil/perfil.html";
+
+    window.location.href =
+        "../perfil/perfil.html";
+
 }

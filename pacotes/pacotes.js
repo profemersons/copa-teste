@@ -1,3 +1,4 @@
+// ⚠️ REMOVER ANTES DA COPA
 const DEV_MODE = true;
 
 const player =
@@ -43,29 +44,25 @@ async function loadTodayStatus() {
                 player.id
             );
 
-
-    const todayOpenings = (data || []).filter(p =>
-        p.created_at &&
-        p.created_at.startsWith(today)
-    );
-
+    const todayOpenings =
+        (data || []).filter(
+            p =>
+                p.created_at &&
+                p.created_at.startsWith(today)
+        );
+    //APAGAR DEPOIS TESTE
     packsRemaining = DEV_MODE
-        ? 3
+        ? 9999
         : 3 - todayOpenings.length;
-
+    //APAGAR DEPOIS TESTE
     /*
-const todayOpenings =
-(data || []).filter(
-    p =>
-        p.opened_at.startsWith(
-            today
-        )
-);
-
-packsRemaining =
-3 - todayOpenings.length;
-*/
-
+        packsRemaining =
+            3 - todayOpenings.length;
+    
+        if (packsRemaining < 0) {
+            packsRemaining = 0;
+        }
+    */
     updateUI();
 }
 
@@ -74,7 +71,7 @@ function updateUI() {
     document.getElementById(
         "remainingText"
     ).textContent =
-        `Você ainda pode abrir ${packsRemaining} pacote(s) hoje`;
+        `📦 Pacotes disponíveis hoje: ${packsRemaining}/3`;
 
     const packs =
         document.querySelectorAll(
@@ -87,7 +84,14 @@ function updateUI() {
             if (
                 index >= packsRemaining
             ) {
+
                 pack.classList.add(
+                    "used"
+                );
+
+            } else {
+
+                pack.classList.remove(
                     "used"
                 );
             }
@@ -106,12 +110,28 @@ document
 
 async function openPack() {
 
+    const now = new Date();
+
+    const hour =
+        now.getHours();
+
+    if (hour < 7) {
+
+        alert(
+            "Os pacotes só podem ser abertos após as 7h da manhã."
+        );
+
+        return;
+    }
+
     if (
         packsRemaining <= 0
     ) {
+
         alert(
             "Você já abriu todos os pacotes de hoje."
         );
+
         return;
     }
 
@@ -128,7 +148,7 @@ async function openPack() {
 
     for (
         let i = 0;
-        i < 3;
+        i < 4;
         i++
     ) {
 
@@ -140,24 +160,29 @@ async function openPack() {
             )
             ];
 
-        rewards.push(
-            sticker
-        );
+        const isShiny =
+            Math.random() < 0.10; // TESTE
+
+        rewards.push({
+            ...sticker,
+            is_shiny: isShiny
+        });
 
         await addToInventory(
-            sticker.id
+            sticker.id,
+            isShiny
         );
+
+
     }
 
     await client
-        .from(
-            "pack_openings"
-        )
+        .from("pack_openings")
         .insert([
             {
                 player_id:
                     player.id,
-                pack_size: 3
+                pack_size: 4
             }
         ]);
 
@@ -171,7 +196,8 @@ async function openPack() {
 }
 
 async function addToInventory(
-    stickerId
+    stickerId,
+    isShiny
 ) {
 
     const {
@@ -189,6 +215,10 @@ async function addToInventory(
             .eq(
                 "sticker_id",
                 stickerId
+            )
+            .eq(
+                "is_shiny",
+                isShiny
             )
             .maybeSingle();
 
@@ -220,6 +250,8 @@ async function addToInventory(
                         player.id,
                     sticker_id:
                         stickerId,
+                    is_shiny:
+                        isShiny,
                     quantity: 1
                 }
             ]);
@@ -252,8 +284,15 @@ function showRewards(rewards) {
 
         div.innerHTML = `
             <div class="reward-emoji">
-                ${sticker.emoji}
-            </div>
+    ${sticker.emoji}
+</div>
+
+${sticker.is_shiny
+                ? `<div class="reward-shiny">
+         ⭐ BRILHANTE
+       </div>`
+                : ""
+            }
 
             <div>
                 ${sticker.profession}

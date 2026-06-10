@@ -2,50 +2,112 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Operação Copa - Trocas</title>
 
-    <link rel="stylesheet" href="trades.css">
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>
+        Operação Copa - Trocas
+    </title>
+
+    <link rel="stylesheet"
+          href="trades.css">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 </head>
 
 <body>
 
     <div id="loading">
+
         Carregando trocas...
+
     </div>
 
-    <div id="app" style="display:none">
+    <div id="app"
+         style="display:none;">
 
         <header class="header">
-            <h1>🔄 Trocas</h1>
-            <p id="stepText">1. Escolha uma figurinha</p>
+
+            <h1>🔄 Enviar Figurinha</h1>
+
+            <p id="stepText">
+                Escolha a figurinha que deseja enviar
+            </p>
+
         </header>
 
-        <!-- PASSO 1: ÁLBUM -->
+        <!-- PASSO 1 -->
+
         <main id="step1">
+
             <div id="albumContainer"></div>
+
         </main>
 
-        <!-- PASSO 2: AMIGO -->
-        <main id="step2" style="display:none">
+        <!-- PASSO 2 -->
 
-            <div class="card">
-                <h3>👤 Encontrar amigo</h3>
-                <input id="friendCode" placeholder="Digite o código Base36">
-                <button onclick="searchFriend()">Buscar amigo</button>
+        <main id="step2"
+              style="display:none;">
+
+            <div class="card-box">
+
+                <h2>
+                    👤 Destinatário
+                </h2>
+
+                <p>
+                    Digite o código do jogador
+                </p>
+
+                <input
+                    id="friendCode"
+                    placeholder="Ex: ABC123">
+
+                <button
+                    onclick="searchFriend()">
+
+                    Buscar Jogador
+
+                </button>
+
             </div>
 
-            <div class="card" id="friendResult" style="display:none"></div>
+            <div
+                id="friendResult"
+                class="friend-result"
+                style="display:none;">
+            </div>
 
-            <div id="pinArea" style="display:none">
+        </main>
 
-                <input id="pinInput" type="password" placeholder="Digite seu PIN">
+        <!-- PASSO 3 -->
 
-                <button id="confirmBtn" onclick="confirmTrade()">
-                    Confirmar troca
+        <main id="step3"
+              style="display:none;">
+
+            <div class="card-box">
+
+                <h2>
+                    📤 Confirmar Envio
+                </h2>
+
+                <div id="tradeSummary"></div>
+
+                <input
+                    id="pinInput"
+                    type="password"
+                    maxlength="4"
+                    placeholder="Digite seu PIN">
+
+                <button
+                    onclick="confirmTrade()">
+
+                    Enviar Figurinha
+
                 </button>
 
             </div>
@@ -54,14 +116,51 @@
 
     </div>
 
-    <!-- MENU PADRÃO (CORRIGIDO) -->
+    <!-- SUCESSO -->
+
+    <div id="successModal"
+         class="modal hidden">
+
+        <div class="modal-content">
+
+            <h2>
+                🎉 Tahceu Figurinha!
+            </h2>
+
+            <div id="successContent"></div>
+
+            <button
+                onclick="closeSuccess()">
+
+                Fechar
+
+            </button>
+
+        </div>
+
+    </div>
+
     <nav class="bottom-nav">
 
-        <button onclick="goAlbum()">🖼</button>
-        <button onclick="goPacks()">🎁</button>
-        <button onclick="goMissions()">🎯</button>
-        <button onclick="goTrades()">🔄</button>
-        <button onclick="goProfile()">👤</button>
+        <button onclick="goAlbum()">
+            🖼
+        </button>
+
+        <button onclick="goPacks()">
+            🎁
+        </button>
+
+        <button onclick="goMissions()">
+            🎯
+        </button>
+
+        <button class="active">
+            🔄
+        </button>
+
+        <button onclick="goProfile()">
+            👤
+        </button>
 
     </nav>
 

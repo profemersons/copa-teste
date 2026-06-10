@@ -2,34 +2,60 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Operação Copa - Álbum</title>
 
-    <link rel="stylesheet" href="album.css">
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+
+    <title>
+        Operação Copa - Álbum
+    </title>
+
+    <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="album.css">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 </head>
 
 <body>
 
     <div id="loading">
+
         Carregando álbum...
+
     </div>
 
-    <div id="app" style="display:none">
+    <div id="app"
+        style="display:none;">
 
         <header class="header">
 
             <div class="player-card">
 
-                <div class="avatar" id="playerEmoji">
-                    😀
+                <div class="avatar"
+                    id="playerEmoji">
                 </div>
 
                 <div class="player-info">
-                    <h2 id="playerName"></h2>
-                    <p id="playerCourse"></p>
+
+                    <h2 id="playerName">
+                    </h2>
+
+                    <p id="playerCourse">
+                    </p>
+
                 </div>
 
             </div>
@@ -40,22 +66,27 @@
                     🏆
                 </div>
 
-                <h1>OPERAÇÃO COPA</h1>
+                <h1>
+                    OPERAÇÃO COPA
+                </h1>
 
                 <p class="subtitle">
+
                     Bastidores do Mundo Real
+
                 </p>
 
                 <div id="progressText">
-                    0 / 0 Figurinhas
                 </div>
 
                 <div class="progress">
-                    <div id="progressFill"></div>
+
+                    <div id="progressFill">
+                    </div>
+
                 </div>
 
                 <div id="progressPercent">
-                    0% Completo
                 </div>
 
             </div>
@@ -64,27 +95,38 @@
 
         <section class="album-title">
 
-            <h2>📖 Álbum de Profissões</h2>
+            <h2>
+                📖 Álbum de Profissões
+            </h2>
 
             <p>
-                Colecione profissões, complete áreas e descubra quem faz a Copa acontecer.
+
+                Colecione profissões,
+                complete áreas e descubra
+                quem faz a Copa acontecer.
+
             </p>
 
         </section>
 
-        <main id="albumContainer"></main>
+        <main id="albumContainer">
+        </main>
 
     </div>
 
-    <div id="modal" class="modal hidden">
+    <div id="modal"
+        class="modal hidden">
 
         <div class="modal-content">
 
             <button id="closeModal">
+
                 ✕
+
             </button>
 
-            <div id="modalBody"></div>
+            <div id="modalBody">
+            </div>
 
         </div>
 
@@ -92,29 +134,37 @@
 
     <nav class="bottom-nav">
 
-        <button>
-            <span>🖼</span>
-            <small>Álbum</small>
+        <button class="active">
+            🖼
         </button>
 
-        <button onclick="goPacks()">🎁</button>
+        <button onclick="goPacks()">
+            🎁
+        </button>
 
-        <button onclick="window.location.href='../missions/missions.html'">
+        <button>
             🎯
         </button>
 
-        <button onclick="goTrades()">🔄</button>
-
-        <button>
-            <span>🏆</span>
-            <small>Ranking</small>
+        <button onclick="goTrades()">
+            🔄
         </button>
 
-        <button onclick="goProfile()">👤</button>
+        <button>
+            🏆
+        </button>
+
+        <button onclick="goProfile()">
+            👤
+        </button>
+
     </nav>
 
-    <script src="../config.js"></script>
-    <script src="album.js"></script>
+    <script src="../config.js">
+    </script>
+
+    <script src="album.js">
+    </script>
 
 </body>
 

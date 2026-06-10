@@ -72,6 +72,9 @@ async function loadInventory() {
 }
 
 function buildAlbum(stickers, inventory) {
+    document.getElementById(
+        "albumContainer"
+    ).innerHTML = "";
 
     const ownedMap = {};
 
@@ -90,6 +93,16 @@ function buildAlbum(stickers, inventory) {
 
     const percent =
         (discovered / stickers.length) * 100;
+
+    document.getElementById(
+        "progressFill"
+    ).style.width =
+        percent + "%";
+
+    document.getElementById(
+        "progressPercent"
+    ).textContent =
+        `${Math.round(percent)}% Completo`;
 
     document.getElementById(
         "progressPercent"
@@ -279,6 +292,6 @@ function goPacks() {
         "../pacotes/pacotes.html";
 }
 function goTrades() {
-   window.location.href =
+    window.location.href =
         "../trocas/trades.html";
 }
