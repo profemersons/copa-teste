@@ -72,138 +72,147 @@ async function loadInventory() {
 }
 
 function buildAlbum(stickers, inventory) {
-    document.getElementById(
-        "albumContainer"
-    ).innerHTML = "";
+    document.getElementById("albumContainer").innerHTML = "";
 
+    // =========================
+    // 1. MAPA CORRETO (NORMAL + SHINY)
+    // =========================
     const ownedMap = {};
 
     inventory.forEach(item => {
-        ownedMap[item.sticker_id] = item.quantity;
+        if (!ownedMap[item.sticker_id]) {
+            ownedMap[item.sticker_id] = {
+                normal: 0,
+                shiny: 0
+            };
+        }
+
+        if (item.is_shiny) {
+            ownedMap[item.sticker_id].shiny += item.quantity;
+        } else {
+            ownedMap[item.sticker_id].normal += item.quantity;
+        }
     });
 
-    const discovered = stickers.filter(
-        s => ownedMap[s.id]
-    ).length;
+    // =========================
+    // 2. PROGRESSO (1 versão já conta)
+    // =========================
+    const discovered = stickers.filter(s => {
+        const data = ownedMap[s.id];
+        return data && (data.normal > 0 || data.shiny > 0);
+    }).length;
 
-    document.getElementById(
-        "progressText"
-    ).textContent =
+    document.getElementById("progressText").textContent =
         `${discovered} / ${stickers.length} Figurinhas`;
 
-    const percent =
-        (discovered / stickers.length) * 100;
+    const percent = (discovered / stickers.length) * 100;
 
-    document.getElementById(
-        "progressFill"
-    ).style.width =
-        percent + "%";
+    document.getElementById("progressFill").style.width = percent + "%";
 
-    document.getElementById(
-        "progressPercent"
-    ).textContent =
+    document.getElementById("progressPercent").textContent =
         `${Math.round(percent)}% Completo`;
 
-    document.getElementById(
-        "progressPercent"
-    ).textContent =
-        `${Math.round(percent)}% Completo`;
-
-    const container =
-        document.getElementById("albumContainer");
+    // =========================
+    // 3. RENDER POR ÁREA
+    // =========================
+    const container = document.getElementById("albumContainer");
 
     areasOrder.forEach(area => {
 
-        const areaStickers =
-            stickers.filter(
-                s => s.area === area
-            );
-
+        const areaStickers = stickers.filter(s => s.area === area);
         if (!areaStickers.length) return;
 
-        const section =
-            document.createElement("section");
-
+        const section = document.createElement("section");
         section.className = "area";
 
-        section.innerHTML =
-            `
-      <div class="area-title">
-        ${area}
-      </div>
+        section.innerHTML = `
+            <div class="area-title">${area}</div>
+            <div class="grid"></div>
+        `;
 
-      <div class="grid"></div>
-      `;
-
-        const grid =
-            section.querySelector(".grid");
+        const grid = section.querySelector(".grid");
 
         areaStickers.forEach(sticker => {
 
-            const qty =
-                ownedMap[sticker.id];
+            const data = ownedMap[sticker.id] || {
+                normal: 0,
+                shiny: 0
+            };
 
-            const card =
-                document.createElement("div");
+            const total = data.normal + data.shiny;
+            const hasAny = total > 0;
+            const hasShiny = data.shiny > 0;
 
-            card.className =
-                qty
-                    ? "card"
-                    : "card locked";
+            const card = document.createElement("div");
 
-            if (
-                sticker.type === "legendary"
-            ) {
-                card.classList.add(
-                    "legendary"
-                );
+            // =========================
+            // 4. CLASSES VISUAIS
+            // =========================
+            card.className = "card";
+
+            if (!hasAny) {
+                card.classList.add("locked");
             }
 
-            card.innerHTML =
-                qty
-                    ? `
-            <div class="emoji">
-              ${sticker.emoji}
-            </div>
+            if (sticker.type === "legendary") {
+                card.classList.add("legendary");
+            }
 
-            <div class="number">
-              #${String(
-                        sticker.global_number
-                    ).padStart(3, "0")}
-            </div>
+            if (hasShiny) {
+                card.classList.add("shiny");
+            }
 
-            ${qty > 1
-                        ? `<div class="quantity">x${qty}</div>`
+            // =========================
+            // 5. CONTEÚDO DO CARD
+            // =========================
+            if (hasAny) {
+                card.innerHTML = `
+                    ${hasShiny ? `<div class="shiny-badge">⭐</div>` : ""}
+
+                    <img 
+                        src="${getStickerImage(sticker.image_path)}" 
+                        class="sticker-img"
+                    />
+
+                    <div class="number">
+                        #${String(sticker.global_number).padStart(3, "0")}
+                    </div>
+
+                    ${total > 1
+                        ? `<div class="quantity">x${total}</div>`
                         : ""
                     }
-          `
-                    : `
-            <div class="emoji">🔒</div>
+                `;
+                /*
+                TROCAR <DIV> PARA MOSTRR NORMAL E SHINY
+                ${(data.normal > 0 || data.shiny > 0) ? `
+                    <div class="quantity">
+                        ${data.normal > 0 ? `C:${data.normal}` : ""}
+                        ${data.shiny > 0 ? ` S:${data.shiny}` : ""}
+                    </div>
+                ` : ""} 
+                */
 
-            <div class="number">
-              #${String(
-                        sticker.global_number
-                    ).padStart(3, "0")}
-            </div>
-          `;
+            } else {
+                card.innerHTML = `
+                    <div class="emoji">🔒</div>
 
-            card.onclick =
-                () =>
-                    openSticker(
-                        sticker,
-                        !!qty
-                    );
+                    <div class="number">
+                        #${String(sticker.global_number).padStart(3, "0")}
+                    </div>
+                `;
+            }
+
+            // =========================
+            // 6. CLICK MODAL
+            // =========================
+            card.onclick = () => openSticker(sticker, hasAny);
 
             grid.appendChild(card);
-
         });
 
-        container.appendChild(
-            section
-        );
-
+        container.appendChild(section);
     });
-
 }
 
 function openSticker(
@@ -238,10 +247,9 @@ function openSticker(
     } else {
 
         body.innerHTML = `
-      <div class="modal-sticker">
-        ${sticker.emoji}
-      </div>
-
+      <div class="modal-image-wrapper">
+      <img src="${getStickerImage(sticker.image_path)}" />
+  </div>
       <h2>
         ${sticker.profession}
       </h2>
@@ -266,10 +274,9 @@ function openSticker(
         ${sticker.real_description}
       </p>
 
-      <p>
-        <b>Tipo:</b>
-        ${sticker.type}
-      </p>
+      <p class="illustrator">
+    Ilustrada por ${sticker.illustrator || "desconhecido"}
+</p>
     `;
     }
 

@@ -6,3 +6,6 @@ window.client = supabase.createClient(
   SUPABASE_ANON_KEY
 );
 
+function getStickerImage(path) {
+    return `${SUPABASE_URL}/storage/v1/object/public/stikers/${path}`;
+}

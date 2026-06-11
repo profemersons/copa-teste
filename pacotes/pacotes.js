@@ -260,58 +260,145 @@ async function addToInventory(
 
 function showRewards(rewards) {
 
-    const container =
-        document.getElementById("resultContainer");
-
-    container.innerHTML = "";
-
     const modal =
         document.getElementById("modal");
 
+    const container =
+        document.getElementById("resultContainer");
+
     modal.classList.remove("hidden");
+    document
+        .getElementById("closeResult")
+        .style.display = "none";
 
-    let i = 0;
+    let current = 0;
 
-    function showNext() {
+    renderSticker();
 
-        if (i >= rewards.length) return;
+    function renderSticker() {
 
-        const sticker = rewards[i];
+        const sticker =
+            rewards[current];
+        if (navigator.vibrate) {
 
-        const div = document.createElement("div");
+            if (sticker.is_shiny) {
 
-        div.className = "reward";
+                navigator.vibrate([80, 40, 80]);
 
-        div.innerHTML = `
-            <div class="reward-emoji">
-    ${sticker.emoji}
-</div>
+            } else {
 
-${sticker.is_shiny
-                ? `<div class="reward-shiny">
-         ⭐ BRILHANTE
-       </div>`
+                navigator.vibrate(40);
+            }
+        }
+
+        container.innerHTML = `
+
+            <div class="reward-card">
+
+                ${sticker.is_shiny
+                ? `
+    <div class="reward-shiny-banner">
+        ⭐ BRILHANTE ⭐
+    </div>
+    `
                 : ""
             }
 
-            <div>
-                ${sticker.profession}
+               <div class="sticker-flip">
+               ${sticker.is_shiny
+                ? `
+<div class="shiny-particles">
+    <span>✨</span>
+    <span>⭐</span>
+    <span>✨</span>
+    <span>⭐</span>
+    <span>✨</span>
+    <span>⭐</span>
+</div>
+`
+                : ""
+            }
+
+    <div class="sticker-inner">
+
+        <div class="sticker-back">
+
+            🏆
+
+        </div>
+
+        <div class="sticker-front">
+
+            <img
+                src="${getStickerImage(sticker.image_path)}"
+                class="
+                    reward-image
+                    ${sticker.is_shiny
+                ? "reward-image-shiny"
+                : ""
+            }
+                "
+            >
+
+        </div>
+
+    </div>
+
+</div>
+
+                <div class="reward-name">
+                    ${sticker.profession}
+                </div>
+
+                <div class="reward-next">
+                    👆 Toque para continuar
+                </div>
+
             </div>
         `;
 
-        container.appendChild(div);
+        container.onclick = () => {
 
-        // vibração leve (mobile)
-        if (navigator.vibrate) {
-            navigator.vibrate(40);
-        }
+            current++;
 
-        i++;
+            if (
+                current >= rewards.length
+            ) {
 
-        setTimeout(showNext, 600);
+                finishPack();
+
+                return;
+            }
+
+            renderSticker();
+        };
     }
 
-    showNext();
+    function finishPack() {
+
+        container.onclick = null;
+
+        container.innerHTML = `
+
+    <div class="pack-finished">
+
+        <h3>
+            🎉 Pacote concluído
+        </h3>
+
+        <p>
+            Você recebeu
+            ${rewards.length}
+            figurinhas.
+        </p>
+
+    </div>
+`;
+
+        document
+            .getElementById("closeResult")
+            .style.display = "block";
+    }
 }
 function goAlbum() {
 
@@ -336,4 +423,15 @@ function bindCloseButton() {
         document.getElementById("modal").classList.add("hidden");
     });
 }
-bindCloseButton();
+document
+    .getElementById("closeResult")
+    .onclick = () => {
+
+        document
+            .getElementById("modal")
+            .classList.add("hidden");
+
+        document
+            .getElementById("resultContainer")
+            .innerHTML = "";
+    };

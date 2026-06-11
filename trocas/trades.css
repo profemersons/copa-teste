@@ -157,12 +157,32 @@ FIGURINHAS
     font-size:36px;
 }
 
-.number{
-    margin-top:6px;
-    font-size:12px;
-    opacity:.75;
+.sticker-img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    border-radius:14px;
 }
 
+.number{
+
+    position:absolute;
+
+    left:8px;
+    bottom:8px;
+
+    z-index:3;
+
+    font-size:11px;
+
+    color:white;
+
+    text-shadow:
+        0 0 4px rgba(0,0,0,.8);
+}
 .quantity{
 
     position:absolute;
@@ -433,4 +453,100 @@ BOTTOM NAV
 
 .bottom-nav .active{
     transform:scale(1.15);
+}
+.back-btn{
+
+    width:auto;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    margin-left:20px;
+    margin-top:0;
+
+    padding:10px 14px;
+}
+.selected-preview{
+
+    margin:20px;
+
+    padding:18px;
+
+    border-radius:20px;
+
+    background:
+    rgba(255,255,255,.08);
+
+    backdrop-filter:blur(12px);
+
+    border:
+    1px solid rgba(255,255,255,.12);
+
+    text-align:center;
+}
+.friend-result{
+
+    text-align:center;
+}
+.friend-result h3{
+
+    font-size:22px;
+}
+.sticker-img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    border-radius:16px;
+}
+
+.card{
+
+    overflow:hidden;
+}
+
+.preview-image,
+.summary-image,
+.success-image{
+
+    width:140px;
+    height:190px;
+
+    object-fit:cover;
+
+    border-radius:18px;
+
+    display:block;
+
+    margin:0 auto 12px;
+}
+
+.preview-shiny{
+
+    border:2px solid #ffdf00;
+
+    box-shadow:
+        0 0 15px rgba(255,223,0,.4),
+        0 0 30px rgba(255,223,0,.2);
+
+    animation:
+        shinePulse 2s infinite;
+}
+
+@keyframes shinePulse{
+
+    0%{
+        filter:brightness(1);
+    }
+
+    50%{
+        filter:brightness(1.15);
+    }
+
+    100%{
+        filter:brightness(1);
+    }
 }

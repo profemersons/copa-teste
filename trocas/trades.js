@@ -186,36 +186,35 @@ function createStickerCard(
     }
 
     card.innerHTML = `
-        ${
-            isShiny
-                ? `
-                    <div class="shiny-badge">
-                        ⭐
-                    </div>
-                `
-                : ""
+    ${isShiny
+            ? `
+            <div class="shiny-badge">
+                ⭐
+            </div>
+        `
+            : ""
         }
 
-        <div class="emoji">
-            ${sticker.emoji}
-        </div>
+    <img
+        src="${getStickerImage(sticker.image_path)}"
+        class="sticker-img"
+    >
 
-        <div class="number">
-            #${String(
-                sticker.global_number
-            ).padStart(3, "0")}
-        </div>
+    <div class="number">
+        #${String(
+            sticker.global_number
+        ).padStart(3, "0")}
+    </div>
 
-        ${
-            inventoryItem.quantity > 1
-                ? `
-                    <div class="quantity">
-                        x${inventoryItem.quantity}
-                    </div>
-                `
-                : ""
+    ${inventoryItem.quantity > 1
+            ? `
+            <div class="quantity">
+                x${inventoryItem.quantity}
+            </div>
+        `
+            : ""
         }
-    `;
+`;
 
     card.onclick = () => {
 
@@ -252,6 +251,31 @@ function goStep2() {
         "stepText"
     ).innerText =
         "2. Digite o código do jogador que receberá a figurinha";
+    //
+    document.getElementById(
+        "selectedStickerPreview"
+    ).innerHTML = `
+    <img
+        src="${getStickerImage(selectedSticker.image_path)}"
+        class="preview-image
+        ${selectedSticker.is_shiny ? "preview-shiny" : ""}"
+    >
+
+    <h3>
+        ${selectedSticker.is_shiny ? "⭐ " : ""}
+        ${selectedSticker.profession}
+    </h3>
+
+    <p>
+        #${String(
+        selectedSticker.global_number
+    ).padStart(3, "0")}
+    </p>
+`;
+    document.getElementById(
+        "selectedStickerPreview"
+    ).style.display = "block";
+    //
 }
 
 async function searchFriend() {
@@ -357,20 +381,21 @@ function goStep3() {
             Você está enviando:
         </p>
 
-        <h3>
-            ${
-                selectedSticker.is_shiny
-                    ? "⭐ "
-                    : ""
-            }
-            ${selectedSticker.emoji}
-            ${selectedSticker.profession}
-        </h3>
+        <img
+    src="${getStickerImage(selectedSticker.image_path)}"
+    class="summary-image
+    ${selectedSticker.is_shiny ? "preview-shiny" : ""}"
+>
+
+<h3>
+    ${selectedSticker.is_shiny ? "⭐ " : ""}
+    ${selectedSticker.profession}
+</h3>
 
         <p>
             #${String(
-                selectedSticker.global_number
-            ).padStart(3, "0")}
+        selectedSticker.global_number
+    ).padStart(3, "0")}
         </p>
 
         <hr>
@@ -388,12 +413,24 @@ function goStep3() {
             ${friend.turma_area}
         </p>
     `;
+    document.getElementById(
+        "selectedStickerPreview"
+    ).style.display = "none";
 }
 /* =========================
 CONFIRMAR ENVIO
 ========================= */
 
 async function confirmTrade() {
+
+    if (selectedSticker.type === "legendary") {
+
+        alert(
+            "Figurinhas lendárias não podem ser enviadas."
+        );
+
+        return;
+    }
 
     if (!selectedSticker) {
 
@@ -605,22 +642,25 @@ function showSuccessModal() {
         )
         .innerHTML = `
             <p>
-                Sua figurinha foi enviada com sucesso.
+                Bye Bye
             </p>
 
             <br>
 
-            <h3>
-                ${
-                    selectedSticker.is_shiny
-                        ? "⭐ "
-                        : ""
-                }
+           <img
+    src="${getStickerImage(selectedSticker.image_path)}"
+    class="success-image
+    ${selectedSticker.is_shiny ? "preview-shiny" : ""}"
+>
 
-                ${selectedSticker.emoji}
+<h3>
+    ${selectedSticker.is_shiny
+            ? "⭐ "
+            : ""
+        }
 
-                ${selectedSticker.profession}
-            </h3>
+    ${selectedSticker.profession}
+</h3>
 
             <p>
                 ➜
@@ -635,7 +675,7 @@ function showSuccessModal() {
             <br>
 
             <p>
-                Agora combina a próxima troca no presencial 😎
+                A figurinha já está viajando para o novo álbum.
             </p>
         `;
 
@@ -691,4 +731,47 @@ function goProfile() {
     window.location.href =
         "../perfil/perfil.html";
 
+}
+function backToStep1() {
+    friend = null;
+
+    document.getElementById(
+        "friendCode"
+    ).value = "";
+
+    document.getElementById(
+        "friendResult"
+    ).style.display = "none";
+
+    document.getElementById(
+        "step2"
+    ).style.display = "none";
+
+    document.getElementById(
+        "step1"
+    ).style.display = "block";
+
+    document.getElementById(
+        "stepText"
+    ).innerText =
+        "1. Escolha uma figurinha";
+}
+function backToStep2() {
+    document.getElementById(
+        "pinInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "step3"
+    ).style.display = "none";
+
+    document.getElementById(
+        "step2"
+    ).style.display = "block";
+
+    document.getElementById(
+        "stepText"
+    ).innerText =
+        "2. Digite o código do jogador que receberá a figurinha";
 }

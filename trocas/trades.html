@@ -5,15 +5,13 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>
         Operação Copa - Trocas
     </title>
 
-    <link rel="stylesheet"
-          href="trades.css">
+    <link rel="stylesheet" href="trades.css">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -27,8 +25,7 @@
 
     </div>
 
-    <div id="app"
-         style="display:none;">
+    <div id="app" style="display:none;">
 
         <header class="header">
 
@@ -37,6 +34,7 @@
             <p id="stepText">
                 Escolha a figurinha que deseja enviar
             </p>
+            
 
         </header>
 
@@ -50,8 +48,13 @@
 
         <!-- PASSO 2 -->
 
-        <main id="step2"
-              style="display:none;">
+        <div id="selectedStickerPreview" class="selected-preview"></div>
+
+        <main id="step2" style="display:none;">
+
+            <button class="back-btn" onclick="backToStep1()">
+                ← Voltar
+            </button>
 
             <div class="card-box">
 
@@ -63,12 +66,9 @@
                     Digite o código do jogador
                 </p>
 
-                <input
-                    id="friendCode"
-                    placeholder="Ex: ABC123">
+                <input id="friendCode" placeholder="Ex: ABC123">
 
-                <button
-                    onclick="searchFriend()">
+                <button onclick="searchFriend()">
 
                     Buscar Jogador
 
@@ -76,18 +76,17 @@
 
             </div>
 
-            <div
-                id="friendResult"
-                class="friend-result"
-                style="display:none;">
+            <div id="friendResult" class="friend-result" style="display:none;">
             </div>
 
         </main>
 
         <!-- PASSO 3 -->
 
-        <main id="step3"
-              style="display:none;">
+        <main id="step3" style="display:none;">
+            <button class="back-btn" onclick="backToStep2()">
+                ← Voltar
+            </button>
 
             <div class="card-box">
 
@@ -97,14 +96,9 @@
 
                 <div id="tradeSummary"></div>
 
-                <input
-                    id="pinInput"
-                    type="password"
-                    maxlength="4"
-                    placeholder="Digite seu PIN">
+                <input id="pinInput" type="password" maxlength="4" placeholder="Digite seu PIN">
 
-                <button
-                    onclick="confirmTrade()">
+                <button onclick="confirmTrade()">
 
                     Enviar Figurinha
 
@@ -118,19 +112,17 @@
 
     <!-- SUCESSO -->
 
-    <div id="successModal"
-         class="modal hidden">
+    <div id="successModal" class="modal hidden">
 
         <div class="modal-content">
 
             <h2>
-                🎉 Tahceu Figurinha!
+                👋 Tchau figurinha!
             </h2>
 
             <div id="successContent"></div>
 
-            <button
-                onclick="closeSuccess()">
+            <button onclick="closeSuccess()">
 
                 Fechar
 
