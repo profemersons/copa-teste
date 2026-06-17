@@ -1,6 +1,7 @@
 // ⚠️ REMOVER ANTES DA COPA
 const DEV_MODE = true;
 
+
 const player =
     JSON.parse(
         localStorage.getItem("player")
@@ -185,6 +186,14 @@ async function openPack() {
                 pack_size: 4
             }
         ]);
+
+    /* =========================
+    ATUALIZA STATS
+    ========================= */
+
+    await recalculatePlayerStats(
+        player.id
+    );
 
     packsRemaining--;
 

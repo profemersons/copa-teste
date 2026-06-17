@@ -31,9 +31,11 @@ async function init() {
 
 }, 60000);
 }
-function getStickerImage(path){
+function getStickerImage(path) {
 
-    return `https://wztykabslwojjlsgwtfc.supabase.co/storage/v1/object/public/stikers/${path}?v=${Date.now()}`;
+    return `
+https://wztykabslwojjlsgwtfc.supabase.co/storage/v1/object/public/stikers/${path}
+`;
 }
 
 function render(stickers) {
@@ -61,7 +63,7 @@ function render(stickers) {
     stickers.forEach(sticker => {
 
         const done =
-    !!sticker.illustrator;
+            !!sticker.image_path;
         const card =
             document.createElement("div");
 

@@ -21,7 +21,8 @@ const areasOrder = [
     "Turismo e Hospitalidade",
     "Desenvolvimento Social",
     "Meio Ambiente, Segurança e Saúde no Trabalho",
-    "Design, Artes e Arquitetura"
+    "Design, Artes e Arquitetura",
+    "Operações da Copa do Mundo"
 ];
 
 init();

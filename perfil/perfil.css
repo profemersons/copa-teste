@@ -339,3 +339,7 @@ button:hover{
 
     transform:scale(1.15);
 }
+.friend-stats {
+    margin-top: 8px;
+    line-height: 1.6;
+}

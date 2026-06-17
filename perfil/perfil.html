@@ -13,7 +13,8 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
@@ -76,24 +77,30 @@
                     </div>
 
                     <div class="stat">
+                        <span id="shinyStickers">0</span>
+                        <small>Brilhantes</small>
+                    </div>
+
+                    <div class="stat">
                         <span id="totalStickers">0</span>
                         <small>Total</small>
                     </div>
-
+                    <div class="stat">
+                        <span id="pointsCount">0</span>
+                        <small>Pontos</small>
+                    </div>
                     <div class="stat">
                         <span id="friendsCount">0</span>
                         <small>Amigos</small>
                     </div>
+
 
                     <div class="stat">
                         <span id="tradesCount">0</span>
                         <small>Trocas</small>
                     </div>
 
-                    <div class="stat">
-                        <span id="pointsCount">0</span>
-                        <small>Pontos</small>
-                    </div>
+
 
                 </div>
 
@@ -188,6 +195,7 @@
     </div>
 
     <script src="../config.js"></script>
+    <script src="../shared/stats.js"></script>
     <script src="perfil.js"></script>
 
 </body>
