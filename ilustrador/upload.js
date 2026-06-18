@@ -19,21 +19,21 @@ async function init() {
 
     setInterval(async () => {
 
-    const { data: stickers } =
-        await client
-            .from("stickers")
-            .select("*")
-            .order("global_number");
+        const { data: stickers } =
+            await client
+                .from("stickers")
+                .select("*")
+                .order("global_number");
 
-    allStickers = stickers;
+        allStickers = stickers;
 
-    setFilter(currentFilter);
+        setFilter(currentFilter);
 
-}, 60000);
+    }, 60000);
 }
-function getStickerImage(path){
+function getStickerImage(path) {
 
-    return `https://wztykabslwojjlsgwtfc.supabase.co/storage/v1/object/public/stikers/${path}?v=${Date.now()}`;
+    return `https://wztykabslwojjlsgwtfc.supabase.co/storage/v1/object/public/stikers/${path}`;
 }
 
 function render(stickers) {
@@ -61,7 +61,7 @@ function render(stickers) {
     stickers.forEach(sticker => {
 
         const done =
-    !!sticker.illustrator;
+            !!sticker.illustrator;
         const card =
             document.createElement("div");
 
@@ -132,7 +132,7 @@ function render(stickers) {
 
         grid.appendChild(card);
     });
-    
+
 }
 
 document
@@ -231,7 +231,7 @@ async function uploadArtwork() {
         "Arte enviada com sucesso!"
     );
 
-    location.reload();
+    await init();
 }
 function setFilter(filter) {
 
@@ -258,7 +258,7 @@ function setFilter(filter) {
 
     render(filtered);
 }
-function showToast(message){
+function showToast(message) {
 
     const toast =
         document.createElement("div");
@@ -275,5 +275,5 @@ function showToast(message){
 
         toast.remove();
 
-    },3000);
+    }, 3000);
 }

@@ -291,15 +291,3 @@ document
         document
             .getElementById("modal")
             .classList.add("hidden");
-function goProfile() {
-    window.location.href =
-        "../perfil/perfil.html";
-}
-function goPacks() {
-    window.location.href =
-        "../pacotes/pacotes.html";
-}
-function goTrades() {
-    window.location.href =
-        "../trocas/trades.html";
-}
